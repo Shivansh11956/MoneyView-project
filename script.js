@@ -4,53 +4,53 @@ const expense = document.getElementById('expense');
 const list = document.getElementById('list');
 const text = document.getElementById('text');
 const amount = document.getElementById('amount');
-const addTransaction = document.getElementById('add-transaction');
+const add = document.getElementById('add-transaction');
 
 let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
 function updateValues() {
   const amounts = transactions.map(t => t.amount);
   const total = amounts.reduce((acc, item) => acc + item, 0).toFixed(2);
-  const incomeTotal = amounts.filter(a => a > 0).reduce((acc, item) => acc + item, 0).toFixed(2);
-  const expenseTotal = (amounts.filter(a => a < 0).reduce((acc, item) => acc + item, 0) * -1).toFixed(2);
+  const totalincome = amounts.filter(a => a > 0).reduce((acc, item) => acc + item, 0).toFixed(2);
+  const totalexpense = (amounts.filter(a => a < 0).reduce((acc, item) => acc + item, 0) * -1).toFixed(2);
 
   balance.textContent = `$${total}`;
-  income.textContent = `$${incomeTotal}`;
-  expense.textContent = `$${expenseTotal}`;
+  income.textContent = `$${totalincome}`;
+  expense.textContent = `$${totalexpense}`;
 }
 
-function addTransactionDOM(transaction) {
+function addDOM(transaction) {
   const tr = document.createElement('tr');
   tr.innerHTML = `
     <td>${transaction.date}</td>
     <td>${transaction.text}</td>
     <td class="amount ${transaction.amount < 0 ? 'expense' : ''}">$${transaction.amount.toFixed(2)}</td>
-    <td><button onclick="removeTransaction(${transaction.id})">X</button></td>
+    <td><button onclick="remove(${transaction.id})">X</button></td>
   `;
   list.appendChild(tr);
 }
 
-function removeTransaction(id) {
+function remove(id) {
   transactions = transactions.filter(t => t.id !== id);
-  updateLocalStorage();
-  updateUI();
+  updatelocal();
+  updateui();
 }
 
-function updateUI() {
+function updateui() {
   list.innerHTML = '';
-  transactions.forEach(addTransactionDOM);
+  transactions.forEach(addDOM);
   updateValues();
 }
 
-function updateLocalStorage() {
+function updatelocal() {
   localStorage.setItem('transactions', JSON.stringify(transactions));
 }
 
-addTransaction.addEventListener('click', () => {
+add.addEventListener('click', () => {
   const textValue = text.value.trim();
-  const amountValue = parseFloat(amount.value);
+  const amtval = parseFloat(amount.value);
 
-  if (!textValue || isNaN(amountValue)) {
+  if (!textValue || isNaN(amtval)) {
     alert('Please enter valid description and amount.');
     return;
   }
@@ -58,19 +58,19 @@ addTransaction.addEventListener('click', () => {
   const transaction = {
     id: Date.now(),
     text: textValue,
-    amount: amountValue,
+    amount: amtval,
     date: new Date().toISOString().split('T')[0],
   };
 
   transactions.push(transaction);
-  updateLocalStorage();
-  updateUI();
+  updatelocal();
+  updateui();
   text.value = '';
   amount.value = '';
 });
 
 function init() {
-  updateUI();
+  updateui();
 }
 
 init();
