@@ -8,7 +8,7 @@ const add = document.getElementById('add-transaction');
 
 let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-function updateValues() {
+function updateval() {
   const amounts = transactions.map(t => t.amount);
   const total = amounts.reduce((acc, item) => acc + item, 0).toFixed(2);
   const totalincome = amounts.filter(a => a > 0).reduce((acc, item) => acc + item, 0).toFixed(2);
@@ -19,7 +19,7 @@ function updateValues() {
   expense.textContent = `$${totalexpense}`;
 }
 
-function addDOM(transaction) {
+function adddom(transaction) {
   const tr = document.createElement('tr');
   tr.innerHTML = `
     <td>${transaction.date}</td>
@@ -38,8 +38,8 @@ function remove(id) {
 
 function updateui() {
   list.innerHTML = '';
-  transactions.forEach(addDOM);
-  updateValues();
+  transactions.forEach(adddom);
+  updateval();
 }
 
 function updatelocal() {
